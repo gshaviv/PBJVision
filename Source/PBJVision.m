@@ -43,7 +43,7 @@
 NSString * const PBJVisionErrorDomain = @"PBJVisionErrorDomain";
 
 static uint64_t const PBJVisionRequiredMinimumDiskSpaceInBytes = 49999872; // ~ 47 MB
-static CGFloat const PBJVisionThumbnailWidth = 160.0f;
+static CGFloat const PBJVisionThumbnailWidth = 300.0f;
 
 // KVO contexts
 
@@ -818,8 +818,8 @@ typedef void (^PBJVisionBlock)();
     _videoFrameRate = 30;
 
     // add notification observers
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    
+//    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
     // session notifications
     [notificationCenter addObserver:self selector:@selector(_sessionRuntimeErrored:) name:AVCaptureSessionRuntimeErrorNotification object:_captureSession];
     [notificationCenter addObserver:self selector:@selector(_sessionStarted:) name:AVCaptureSessionDidStartRunningNotification object:_captureSession];
@@ -864,7 +864,7 @@ typedef void (^PBJVisionBlock)();
     [self removeObserver:self forKeyPath:@"currentDevice.torchAvailable"];
 
     // remove notification observers (we don't want to just 'remove all' because we're also observing background notifications
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+//    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 
     // session notifications
     [notificationCenter removeObserver:self name:AVCaptureSessionRuntimeErrorNotification object:_captureSession];
@@ -879,6 +879,7 @@ typedef void (^PBJVisionBlock)();
     // capture device notifications
     [notificationCenter removeObserver:self name:AVCaptureDeviceSubjectAreaDidChangeNotification object:nil];
 
+    [_captureOutputPhoto removeObserver:self forKeyPath:@"capturingStillImage"];
     _captureOutputPhoto = nil;
     _captureOutputAudio = nil;
     _captureOutputVideo = nil;
